@@ -18,14 +18,14 @@ interface ColorPaletteProps {
 
 const ColorPalette: React.FC<ColorPaletteProps> = ({ colors }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [categoryFilter, setCategoryFilter] = React.useState('');
+  const [categoryFilter, setCategoryFilter] = React.useState('all'); // Changed from empty string to 'all'
   
   const filteredColors = colors.filter(color => {
     const matchesSearch = !searchTerm || 
       color.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
       color.reference.toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesCategory = !categoryFilter || color.category === categoryFilter;
+    const matchesCategory = categoryFilter === 'all' || color.category === categoryFilter; // Updated condition
     
     return matchesSearch && matchesCategory;
   });
@@ -56,7 +56,7 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors }) => {
               <SelectValue placeholder="Toutes les catégories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Toutes les catégories</SelectItem>
+              <SelectItem value="all">Toutes les catégories</SelectItem> {/* Changed from empty string to 'all' */}
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>{category}</SelectItem>
               ))}
