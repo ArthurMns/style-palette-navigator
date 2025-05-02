@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,7 +5,9 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    /* Blanc */
     --foreground: 222.2 84% 4.9%;
+    /* Noir très foncé */
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -14,24 +15,36 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 215 80% 40%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 220 15% 71%;
+    /* #a1adb5 */
+    --primary-foreground: 0 0% 100%;
+    /* Blanc */
 
-    --secondary: 215 15% 95%;
+    --secondary: 220 15% 85%;
+    /* #D0D7DD */
     --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Noir très foncé */
+
+    --tertiary: 38 14% 63%;
+    /* #B3A28E */
+    --tertiary-foreground: 222.2 47.4% 11.2%;
+    /* Noir très foncé */
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 30 80% 60%;
+    --accent: 30 30% 90%;
+    /* #F1E4D5 */
     --accent-foreground: 222.2 47.4% 11.2%;
+    /* Noir très foncé */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 215 80% 40%;
+    --ring: 220 15% 71%;
+    /* #a1adb5 */
 
     --radius: 0.5rem;
 
@@ -55,16 +68,25 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 215 80% 40%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 220 15% 71%;
+    /* #a1adb5 */
+    --primary-foreground: 0 0% 0%;
+    /* Noir */
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 15% 20%;
+    /* Version sombre de #D0D7DD */
     --secondary-foreground: 210 40% 98%;
+
+    --tertiary: 38 14% 30%;
+    /* #B3A28E */
+    --tertiary-foreground: 210 40% 98%;
+    /* Blanc */
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 30 80% 60%;
+    --accent: 30 30% 30%;
+    /* Version sombre de #F1E4D5 */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -73,7 +95,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -124,19 +146,11 @@
 
 /* Color application point styles */
 .color-point {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  margin-left: -12px;
-  margin-top: -12px;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: transform 0.2s ease;
+  @apply absolute w-6 h-6 rounded-full border-2 border-white shadow-md cursor-pointer transition-transform hover:scale-110 z-10;
 }
 
-.color-point:hover, .color-point.selected {
+.color-point:hover,
+.color-point.selected {
   transform: scale(1.3);
   z-index: 10;
 }

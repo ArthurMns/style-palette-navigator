@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Camera, Upload, MoreHorizontal, Plus, Trash, Copy, Save, FileText, FileDown } from 'lucide-react';
@@ -6,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import ColorPalette from '@/components/ColorPalette';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,6 +26,7 @@ import { Color, Project as ProjectType, RoomImage, ColorApplication } from '@/li
 import { sampleColors } from '@/data/sampleData';
 import DecoTipsSection from '@/components/DecoTipsSection';
 import RecapSection from '@/components/RecapSection';
+import Footer from '../components/Footer';
 
 const ProjectPage = () => {
   const { projectId } = useParams();
@@ -34,7 +34,7 @@ const ProjectPage = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
-  
+
   // État pour stocker les données du projet
   const [project, setProject] = useState<ProjectType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +46,7 @@ const ProjectPage = () => {
   const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [generatingCSV, setGeneratingCSV] = useState(false);
-  
+
   // Simuler le chargement des données du projet
   useEffect(() => {
     const fetchProject = async () => {
@@ -106,7 +106,7 @@ const ProjectPage = () => {
             }
           ]
         };
-        
+
         setProject(demoProject);
         setProjectName(demoProject.name);
         setSelectedRoom(demoProject.rooms[0].id);
@@ -116,7 +116,7 @@ const ProjectPage = () => {
         setLoading(false);
       }, 500);
     };
-    
+
     fetchProject();
   }, [projectId]);
 
@@ -132,28 +132,28 @@ const ProjectPage = () => {
       }
     }
   }, [selectedRoom, project]);
-  
+
   // Fonctions pour gérer les actions sur le projet
   const handleRenameProject = () => {
     if (project) {
       const updatedProject = { ...project, name: projectName };
       setProject(updatedProject);
       setEditingName(false);
-      
+
       toast({
         title: "Projet renommé",
         description: "Le nom du projet a été mis à jour.",
       });
     }
   };
-  
+
   const handleDuplicateProject = () => {
     toast({
       title: "Projet dupliqué",
       description: "Une copie du projet a été créée.",
     });
   };
-  
+
   const handleDeleteProject = () => {
     toast({
       title: "Projet supprimé",
@@ -162,23 +162,23 @@ const ProjectPage = () => {
     });
     navigate('/');
   };
-  
+
   // Fonctions pour gérer les images
   const handleTakePhoto = () => {
     if (cameraRef.current) {
       cameraRef.current.click();
     }
   };
-  
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0 || !project || !selectedRoom) {
       return;
     }
-      
+
     const file = files[0];
     const reader = new FileReader();
-      
+
     reader.onload = (e) => {
       if (e.target?.result && project) {
         const newImageId = `img-${Date.now()}`;
@@ -187,7 +187,7 @@ const ProjectPage = () => {
           src: e.target.result as string,
           colorApplied: []
         };
-          
+
         const updatedRooms = project.rooms.map(room => {
           if (room.id === selectedRoom) {
             return {
@@ -197,39 +197,39 @@ const ProjectPage = () => {
           }
           return room;
         });
-          
+
         setProject({
           ...project,
           rooms: updatedRooms,
           updatedAt: new Date().toISOString()
         });
-          
+
         setSelectedImage(newImage);
-          
+
         toast({
           title: "Image ajoutée",
           description: `L'image a été ajoutée à la pièce ${project.rooms.find(r => r.id === selectedRoom)?.name}.`,
         });
       }
     };
-      
+
     reader.readAsDataURL(file);
-    
+
     // Réinitialiser l'input file pour permettre de sélectionner le même fichier plusieurs fois
     event.target.value = '';
   };
-  
+
   const handleImportImage = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
-  
+
   const handleSelectImage = (image: RoomImage) => {
     setSelectedImage(image);
     setSelectedPastille(null);
   };
-  
+
   // Fonction pour gérer le drag-and-drop des couleurs
   const handleColorDrop = (e: React.DragEvent<HTMLDivElement>, color: Color) => {
     e.preventDefault();
@@ -238,7 +238,7 @@ const ProjectPage = () => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
+
     const newPastille: ColorApplication = {
       id: `pastille-${Date.now()}`,
       colorId: color.id,
@@ -249,113 +249,113 @@ const ProjectPage = () => {
       finishType: "mate",
       undercoat: false
     };
-    
-    const updatedImage = { 
-      ...selectedImage, 
-      colorApplied: [...selectedImage.colorApplied, newPastille] 
+
+    const updatedImage = {
+      ...selectedImage,
+      colorApplied: [...selectedImage.colorApplied, newPastille]
     };
-    
+
     if (project) {
       const updatedRooms = project.rooms.map(room => ({
         ...room,
-        images: room.images.map(img => 
+        images: room.images.map(img =>
           img.id === selectedImage.id ? updatedImage : img
         )
       }));
-      
+
       setProject({
         ...project,
         rooms: updatedRooms,
         updatedAt: new Date().toISOString()
       });
-      
+
       setSelectedImage(updatedImage);
       setSelectedPastille(newPastille);
     }
   };
-  
+
   // Fonction pour sélectionner une pastille
   const handleSelectPastille = (pastille: ColorApplication) => {
     setSelectedPastille(pastille);
   };
-  
+
   // Fonction pour mettre à jour une pastille
   const handleUpdatePastille = (updatedPastille: ColorApplication) => {
     if (!selectedImage || !project) return;
-    
-    const updatedColorApplied = selectedImage.colorApplied.map(p => 
+
+    const updatedColorApplied = selectedImage.colorApplied.map(p =>
       p.id === updatedPastille.id ? updatedPastille : p
     );
-    
+
     const updatedImage = {
       ...selectedImage,
       colorApplied: updatedColorApplied
     };
-    
+
     const updatedRooms = project.rooms.map(room => ({
       ...room,
-      images: room.images.map(img => 
+      images: room.images.map(img =>
         img.id === selectedImage.id ? updatedImage : img
       )
     }));
-    
+
     setProject({
       ...project,
       rooms: updatedRooms,
       updatedAt: new Date().toISOString()
     });
-    
+
     setSelectedImage(updatedImage);
-    
+
     toast({
       title: "Pastille mise à jour",
       description: "Les paramètres de la pastille ont été enregistrés.",
     });
   };
-  
+
   // Fonction pour supprimer une pastille
   const handleDeletePastille = (pastilleId: string) => {
     if (!selectedImage || !project) return;
-    
+
     const updatedColorApplied = selectedImage.colorApplied.filter(p => p.id !== pastilleId);
-    
+
     const updatedImage = {
       ...selectedImage,
       colorApplied: updatedColorApplied
     };
-    
+
     const updatedRooms = project.rooms.map(room => ({
       ...room,
-      images: room.images.map(img => 
+      images: room.images.map(img =>
         img.id === selectedImage.id ? updatedImage : img
       )
     }));
-    
+
     setProject({
       ...project,
       rooms: updatedRooms,
       updatedAt: new Date().toISOString()
     });
-    
+
     setSelectedImage(updatedImage);
     setSelectedPastille(null);
-    
+
     toast({
       title: "Pastille supprimée",
       description: "La pastille a été supprimée de l'image.",
       variant: "destructive",
     });
   };
-  
+
   // Fonction pour générer les livrables
   const handleGeneratePDF = () => {
     setGeneratingPDF(true);
-    
+
     toast({
       title: "Génération en cours",
       description: "Le PDF est en cours de génération...",
     });
-    
+
     // Simuler un délai de génération
     setTimeout(() => {
       setGeneratingPDF(false);
@@ -365,15 +365,15 @@ const ProjectPage = () => {
       });
     }, 2000);
   };
-  
+
   const handleExportCSV = () => {
     setGeneratingCSV(true);
-    
+
     toast({
       title: "Export en cours",
       description: "Le fichier CSV pour EBP est en cours de génération...",
     });
-    
+
     // Simuler un délai de génération
     setTimeout(() => {
       setGeneratingCSV(false);
@@ -383,7 +383,7 @@ const ProjectPage = () => {
       });
     }, 1500);
   };
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -406,7 +406,7 @@ const ProjectPage = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen flex flex-col w-full">
       {/* En-tête du projet */}
@@ -416,7 +416,7 @@ const ProjectPage = () => {
             <Button variant="ghost" size="icon" onClick={() => navigate('/')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            
+
             {editingName ? (
               <div className="flex items-center">
                 <Input
@@ -425,8 +425,8 @@ const ProjectPage = () => {
                   className="max-w-[250px]"
                   autoFocus
                 />
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="sm"
                   onClick={handleRenameProject}
                   className="ml-2"
@@ -436,7 +436,7 @@ const ProjectPage = () => {
                 </Button>
               </div>
             ) : (
-              <h1 
+              <h1
                 className="font-bold text-xl cursor-pointer hover:text-primary"
                 onClick={() => setEditingName(true)}
               >
@@ -444,43 +444,19 @@ const ProjectPage = () => {
               </h1>
             )}
           </div>
-          
-          <div className="flex items-center gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setEditingName(true)}>
-                  Renommer le projet
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDuplicateProject}>
-                  Dupliquer le projet
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onClick={handleDeleteProject}
-                >
-                  Supprimer le projet
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+
         </div>
       </header>
-      
-      {/* Corps du projet */}
-      <main className="flex-1 p-4 bg-gray-50 w-full">
-        <div className="container mx-auto max-w-[1440px] px-0 sm:px-2">
+
+      <main className="flex-1 p-6">
+        <div className="container mx-auto">
           <Tabs defaultValue="photos" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-4 w-full">
               <TabsTrigger value="photos" className="flex-1">Photos et Couleurs</TabsTrigger>
               <TabsTrigger value="deco" className="flex-1">Conseils Déco</TabsTrigger>
               <TabsTrigger value="recap" className="flex-1">Récapitulatif</TabsTrigger>
             </TabsList>
-            
+
             {/* Sélecteur de pièce */}
             <div className="mb-4">
               <Label htmlFor="room-select" className="mb-1 block">Pièce</Label>
@@ -498,25 +474,25 @@ const ProjectPage = () => {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <TabsContent value="photos" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Zone principale - photo et pastilles */}
                 <div className="col-span-2 space-y-4">
                   {selectedImage ? (
                     <div className="relative w-full bg-white rounded-lg border border-border overflow-hidden"
-                         onDragOver={(e) => e.preventDefault()}
-                         onDrop={(e) => {
-                           const colorData = e.dataTransfer.getData('color');
-                           if (colorData) {
-                             const color = JSON.parse(colorData);
-                             handleColorDrop(e, color);
-                           }
-                         }}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        const colorData = e.dataTransfer.getData('color');
+                        if (colorData) {
+                          const color = JSON.parse(colorData);
+                          handleColorDrop(e, color);
+                        }
+                      }}
                     >
                       <div className="relative">
-                        <img 
-                          src={selectedImage.src} 
+                        <img
+                          src={selectedImage.src}
                           alt="Image du projet"
                           className="w-full h-auto object-contain"
                         />
@@ -526,7 +502,7 @@ const ProjectPage = () => {
                             <div
                               key={pastille.id}
                               className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 border-white cursor-pointer hover:scale-125 transition-transform ${selectedPastille?.id === pastille.id ? 'scale-125 ring-2 ring-primary' : ''}`}
-                              style={{ 
+                              style={{
                                 backgroundColor: color?.hexCode || '#000000',
                                 left: pastille.position.x,
                                 top: pastille.position.y
@@ -537,7 +513,7 @@ const ProjectPage = () => {
                           );
                         })}
                       </div>
-                      
+
                       <div className="bg-white p-3 border-t border-border">
                         <p className="text-sm font-medium">
                           Glissez et déposez une couleur sur l'image pour ajouter une pastille
@@ -561,7 +537,7 @@ const ProjectPage = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Galerie d'images */}
                   <div className="bg-white rounded-lg border border-border p-4">
                     <h3 className="font-medium mb-3">Images de la pièce</h3>
@@ -569,19 +545,18 @@ const ProjectPage = () => {
                       {project?.rooms.find(room => room.id === selectedRoom)?.images.map(image => (
                         <div
                           key={image.id}
-                          className={`aspect-square rounded-md overflow-hidden border-2 cursor-pointer ${
-                            selectedImage?.id === image.id ? 'border-primary' : 'border-transparent'
-                          }`}
+                          className={`aspect-square rounded-md overflow-hidden border-2 cursor-pointer ${selectedImage?.id === image.id ? 'border-primary' : 'border-transparent'
+                            }`}
                           onClick={() => handleSelectImage(image)}
                         >
-                          <img 
-                            src={image.src} 
+                          <img
+                            src={image.src}
                             alt="Miniature"
                             className="w-full h-full object-cover"
                           />
                         </div>
                       ))}
-                      
+
                       <div className="aspect-square rounded-md border border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-50">
                         <div className="text-center" onClick={handleImportImage}>
                           <Plus className="h-6 w-6 mx-auto text-gray-400" />
@@ -589,7 +564,7 @@ const ProjectPage = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-2 mt-4">
                       <Button variant="outline" size="sm" onClick={handleTakePhoto}>
                         <Camera className="h-4 w-4 mr-1" />
@@ -600,9 +575,9 @@ const ProjectPage = () => {
                         Importer une image
                       </Button>
                     </div>
-                    
+
                     {/* Input file caché */}
-                    <input 
+                    <input
                       type="file"
                       ref={fileInputRef}
                       accept="image/*"
@@ -610,7 +585,7 @@ const ProjectPage = () => {
                       onChange={handleFileChange}
                     />
                     {/* Input camera caché */}
-                    <input 
+                    <input
                       type="file"
                       ref={cameraRef}
                       accept="image/*"
@@ -620,11 +595,11 @@ const ProjectPage = () => {
                     />
                   </div>
                 </div>
-                
+
                 {/* Palette de couleurs et configuration pastille */}
                 <div className="col-span-1 space-y-4">
                   <ColorPalette colors={sampleColors} />
-                  
+
                   {/* Formulaire de configuration de pastille */}
                   {selectedPastille && selectedImage && (
                     <div className="bg-white rounded-lg border border-border p-4">
@@ -639,14 +614,14 @@ const ProjectPage = () => {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="deco">
               <DecoTipsSection project={project} selectedRoom={selectedRoom} />
             </TabsContent>
-            
+
             <TabsContent value="recap">
-              <RecapSection 
-                project={project} 
+              <RecapSection
+                project={project}
                 onGeneratePDF={handleGeneratePDF}
                 onExportCSV={handleExportCSV}
                 generatingPDF={generatingPDF}
@@ -656,30 +631,8 @@ const ProjectPage = () => {
           </Tabs>
         </div>
       </main>
-      
-      {/* Footer avec statut de génération */}
-      <footer className="w-full px-4 py-3 bg-white border-t border-gray-200">
-        <div className="container mx-auto max-w-[1440px] flex justify-between items-center">
-          <div className="text-sm text-gray-500">
-            {generatingPDF && (
-              <span className="flex items-center">
-                <span className="animate-pulse mr-2">●</span> Génération du PDF en cours...
-              </span>
-            )}
-            {generatingCSV && (
-              <span className="flex items-center">
-                <span className="animate-pulse mr-2">●</span> Export CSV en cours...
-              </span>
-            )}
-            {!generatingPDF && !generatingCSV && (
-              <span>Système prêt</span>
-            )}
-          </div>
-          <div className="text-sm text-gray-500">
-            Dernière mise à jour: {new Date().toLocaleDateString('fr-FR')}
-          </div>
-        </div>
-      </footer>
+
+      <Footer />
     </div>
   );
 };

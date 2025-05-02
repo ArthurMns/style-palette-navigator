@@ -3,6 +3,31 @@ import { Project, Color } from "../lib/types";
 
 export const sampleProjects: Project[] = [
   {
+    id: "proj-005",
+    name: "Maison Bernard",
+    clientName: "Marc Bernard",
+    createdAt: "2025-05-01T08:00:00Z",
+    updatedAt: "2025-05-03T11:20:00Z",
+    coverImage: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
+    rooms: []
+  },
+  {
+    id: "proj-006",
+    name: "Loft Durand",
+    clientName: "Claire Durand",
+    createdAt: "2025-05-05T13:45:00Z",
+    updatedAt: "2025-05-07T16:30:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-007",
+    name: "Résidence Leroy",
+    clientName: "Thomas Leroy",
+    createdAt: "2025-05-10T09:30:00Z",
+    updatedAt: "2025-05-12T14:15:00Z",
+    rooms: []
+  },
+  {
     id: "proj-001",
     name: "Rénovation Maison Dubois",
     clientName: "Jean Dubois",
@@ -37,7 +62,8 @@ export const sampleProjects: Project[] = [
     clientName: "Pierre Leblanc",
     createdAt: "2025-04-15T11:30:00Z",
     updatedAt: "2025-04-26T10:20:00Z",
-    rooms: []
+    rooms: [],
+    coverImage: "https://images.unsplash.com/photo-1746061546854-1fb8b0b90862"
   },
   {
     id: "proj-004",
@@ -45,6 +71,49 @@ export const sampleProjects: Project[] = [
     clientName: "Marie Petit",
     createdAt: "2025-04-10T14:00:00Z",
     updatedAt: "2025-04-25T09:10:00Z",
+    rooms: []
+  }
+  ,
+  {
+    id: "proj-008",
+    name: "Maison Rivière",
+    clientName: "Alice Rivière",
+    createdAt: "2025-05-15T10:00:00Z",
+    updatedAt: "2025-05-17T15:45:00Z",
+    coverImage: "https://images.unsplash.com/photo-1746061546123-8c38375eef05",
+    rooms: []
+  },
+  {
+    id: "proj-009",
+    name: "Appartement Moreau",
+    clientName: "François Moreau",
+    createdAt: "2025-05-20T09:00:00Z",
+    updatedAt: "2025-05-22T14:30:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-010",
+    name: "Villa Lambert",
+    clientName: "Julie Lambert",
+    createdAt: "2025-05-25T11:15:00Z",
+    updatedAt: "2025-05-27T16:20:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-011",
+    name: "Loft Girard",
+    clientName: "Paul Girard",
+    createdAt: "2025-05-30T13:30:00Z",
+    updatedAt: "2025-06-01T10:45:00Z",
+    coverImage: "https://images.unsplash.com/photo-1746061546234-8c38375eef06",
+    rooms: []
+  },
+  {
+    id: "proj-012",
+    name: "Résidence Mercier",
+    clientName: "Emma Mercier",
+    createdAt: "2025-06-05T08:45:00Z",
+    updatedAt: "2025-06-07T12:15:00Z",
     rooms: []
   }
 ];
@@ -114,4 +183,5 @@ export const sampleColors: Color[] = [
     category: "Violets",
     brand: "SoStyle"
   }
+  
 ];

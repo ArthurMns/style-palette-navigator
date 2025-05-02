@@ -50,11 +50,11 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors }) => {
         </div>
         
         <div>
-          <Label htmlFor="category-select">Catégorie</Label>
+          {/* <Label htmlFor="category-select">Catégorie</Label> */}
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger id="category-select">
+            {/* <SelectTrigger id="category-select">
               <SelectValue placeholder="Toutes les catégories" />
-            </SelectTrigger>
+            </SelectTrigger> */}
             <SelectContent>
               <SelectItem value="all">Toutes les catégories</SelectItem> {/* Changed from empty string to 'all' */}
               {categories.map((category) => (
