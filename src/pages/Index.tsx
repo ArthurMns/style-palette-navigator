@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Ajout de useMemo
 import { PlusCircle, Search } from 'lucide-react';
 import Header from '../components/Header';
 import ProjectCard from '../components/ProjectCard';
@@ -13,10 +13,16 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // Ajout des imports Select
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -25,19 +31,37 @@ const Index = () => {
   const { toast } = useToast();
   const projectsPerPage = 8; // 2 lignes de 4 projets
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(''); // Ajout pour la recherche
+  const [selectedConseiller, setSelectedConseiller] = useState<string>('Tous'); // Ajout pour le filtre conseiller
 
-  // Calculer le nombre total de pages
-  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  // Obtenir la liste unique des conseillers
+  const conseillers = useMemo(() => {
+    const allConseillers = projects.map(p => p.conseilleName).filter(Boolean); // Filtrer les undefined/null
+    return ['Tous', ...Array.from(new Set(allConseillers))];
+  }, [projects]);
 
-  // Calculer l'index de début et de fin
+  // Filtrer les projets en fonction de la recherche et du conseiller sélectionné
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project => {
+      const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.conseilleName?.toLowerCase().includes(searchTerm.toLowerCase()); // Recherche aussi par conseiller
+      const matchesConseiller = selectedConseiller === 'Tous' || project.conseilleName === selectedConseiller;
+      return matchesSearch && matchesConseiller;
+    });
+  }, [projects, searchTerm, selectedConseiller]);
+
+  // Calculer le nombre total de pages basé sur les projets filtrés
+  const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+
+  // Calculer l'index de début et de fin pour les projets filtrés
   const startIndex = (currentPage - 1) * projectsPerPage;
   const endIndex = startIndex + projectsPerPage;
-  const displayedProjects = projects.slice(startIndex, endIndex);
+  const displayedProjects = filteredProjects.slice(startIndex, endIndex);
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) return;
-    setCurrentPage(newPage);
-  };
+  // Réinitialiser la page à 1 lorsque le filtre ou la recherche change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedConseiller]);
 
   const handleCreateProject = (projectName: string, conseilleName: string) => {
     const newProject: Project = {
@@ -91,8 +115,6 @@ const Index = () => {
   };
 
   const handleRenameProject = (projectId: string) => {
-    // In a real app, this would open a modal for renaming
-    // For this example, we'll just add "(renommé)" to the project name
     setProjects(
       projects.map(p =>
         p.id === projectId
@@ -108,7 +130,6 @@ const Index = () => {
   };
 
   const handleSelectProject = (projectId: string) => {
-    // In a real app, this would navigate to project details page
     toast({
       title: "Projet sélectionné",
       description: `Vous avez sélectionné le projet ID: ${projectId}`,
@@ -123,21 +144,38 @@ const Index = () => {
       <main className="flex-1 p-6 bg-gray-50 overflow-y-auto max-h-screen">
         <div className="container mx-auto">
           <section className="mb-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold">Projets récents</h2>
+            <div className="flex flex-wrap justify-between items-center mb-6 gap-4"> {/* Ajout de flex-wrap et gap */}
+              <h2 className="text-xl font-semibold w-full sm:w-auto">Projets récents</h2> {/* Ajustement de la largeur */}
 
-              <div className="flex-1 max-w-md mx-4">
-                <div className="relative">
+              {/* Barre de recherche et Filtre Conseiller */}
+              <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto sm:flex-nowrap"> {/* Ajustement de la largeur et flex-wrap */}
+                <div className="relative flex-grow sm:flex-grow-0 sm:w-64"> {/* Ajustement de la largeur */}
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="text"
-                    placeholder="Rechercher un projet..."
-                    className="pl-8 bg-gray-50"
+                    placeholder="Rechercher projet ou conseiller..."
+                    className="pl-8 bg-gray-50 w-full" // Assurer la pleine largeur sur mobile
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
+
+                {/* Sélecteur de Conseiller */}
+                <Select value={selectedConseiller} onValueChange={setSelectedConseiller}>
+                  <SelectTrigger className="w-full sm:w-[180px]"> {/* Ajustement de la largeur */}
+                    <SelectValue placeholder="Filtrer par conseiller" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {conseillers.map(conseiller => (
+                      <SelectItem key={conseiller} value={conseiller}>
+                        {conseiller}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 w-full sm:w-auto justify-end sm:justify-start"> {/* Ajustement de la largeur et justification */}
                 <Button variant="tertiary" size="sm" onClick={() => setShowNewProjectModal(true)}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Nouveau projet
@@ -160,8 +198,12 @@ const Index = () => {
               </div>
             ) : (
               <div className="text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
-                <h3 className="text-lg font-medium text-gray-900 mb-1">Aucun projet</h3>
-                <p className="text-gray-500 mb-4">Commencez par créer un nouveau projet.</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-1">Aucun projet trouvé</h3>
+                <p className="text-gray-500 mb-4">
+                  {searchTerm || selectedConseiller !== 'Tous'
+                    ? "Essayez d'ajuster vos filtres ou votre recherche."
+                    : "Commencez par créer un nouveau projet."}
+                </p>
                 <Button onClick={() => setShowNewProjectModal(true)}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Créer un projet
@@ -169,8 +211,8 @@ const Index = () => {
               </div>
             )}
 
-            {/* Pagination simplifiée sans numéros de page */}
-            {projects.length > projectsPerPage && (
+            {/* Pagination basée sur les projets filtrés */}
+            {filteredProjects.length > projectsPerPage && (
               <div className="flex justify-end items-center mt-4">
                 <Pagination>
                   <PaginationContent>
