@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, Search } from 'lucide-react';
-// import Header from '../components/Header';
+import Header from '../components/Header';
 import ProjectCard from '../components/ProjectCard';
 import NewProjectModal from '../components/NewProjectModal';
 import ColorPalette from '../components/ColorPalette';
@@ -18,7 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-// import Footer from '@/components/Footer';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const [projects, setProjects] = useState<Project[]>(sampleProjects);
@@ -111,7 +111,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* <Header onNewProject={() => setShowNewProjectModal(true)} /> */}
+      <Header onNewProject={() => setShowNewProjectModal(true)} />
 
       <main className="flex-1 p-6 bg-gray-50 overflow-y-auto max-h-screen">
         <div className="container mx-auto">
@@ -131,14 +131,14 @@ const Index = () => {
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="relative w-64">
+                {/* <div className="relative w-64">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="text"
                     placeholder="Rechercher un projet..."
                     className="pl-10 pr-4 py-2 h-10 w-full bg-white border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
-                </div>
+                </div> */}
                 
                 <Button variant="outline" size="sm" onClick={() => setShowNewProjectModal(true)}>
                   <PlusCircle className="h-4 w-4 mr-2" />
@@ -198,7 +198,7 @@ const Index = () => {
         onClose={() => setShowNewProjectModal(false)}
         onCreateProject={handleCreateProject}
       />
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };
