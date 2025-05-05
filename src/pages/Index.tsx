@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Search } from 'lucide-react';
 import Header from '../components/Header';
 import ProjectCard from '../components/ProjectCard';
 import NewProjectModal from '../components/NewProjectModal';
@@ -9,6 +8,8 @@ import { Project } from '../lib/types';
 import { sampleProjects, sampleColors } from '../data/sampleData';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
+
 
 const Index = () => {
   const [projects, setProjects] = useState<Project[]>(sampleProjects);
@@ -99,12 +100,24 @@ const Index = () => {
       <main className="flex-1 p-6 bg-gray-50">
         <div className="container mx-auto">
           <section className="mb-8">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">Projets récents</h2>
-              <Button variant="outline" size="sm" onClick={() => setShowNewProjectModal(true)}>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Nouveau projet
-              </Button>
+              
+              <div className="flex items-center gap-4">
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Rechercher un projet..."
+                    className="pl-10 pr-4 py-2 h-10 w-full bg-white border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                
+                <Button variant="outline" size="sm" onClick={() => setShowNewProjectModal(true)}>
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Nouveau projet
+                </Button>
+              </div>
             </div>
             
             {projects.length > 0 ? (
@@ -132,12 +145,12 @@ const Index = () => {
             )}
           </section>
           
-          <section>
+          {/* <section>
             <h2 className="text-xl font-semibold mb-4">Outils</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <ColorPalette colors={sampleColors} />
             </div>
-          </section>
+          </section> */}
         </div>
       </main>
       
