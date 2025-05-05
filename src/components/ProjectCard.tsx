@@ -29,7 +29,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onRename
 }) => {
   const navigate = useNavigate();
-  
+
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "d MMMM yyyy", { locale: fr });
   };
@@ -40,7 +40,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   return (
-    <div 
+    <div
       className="project-card bg-white relative cursor-pointer"
       onClick={handleCardClick}
     >
@@ -57,11 +57,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         )}
       </div>
-      
+
       <div className="p-3">
         <div className="flex justify-between items-start">
           <h3 className="font-medium text-base line-clamp-1">{project.name}</h3>
-          
+
           <div className="project-card-options">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -82,7 +82,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 }}>
                   Dupliquer
                 </DropdownMenuItem>
-                <DropdownMenuItem 
+                <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation();
+                  onRename(project.id);
+                }}>
+                  Transférer
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   className="text-destructive focus:text-destructive"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -95,12 +101,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </DropdownMenu>
           </div>
         </div>
-        
+
         <div className="flex items-center text-sm text-muted-foreground mt-1">
           <User className="h-3.5 w-3.5 mr-1" />
-          <span className="line-clamp-1">{project.clientName}</span>
+          <span className="line-clamp-1">{project.conseilleName}</span>
         </div>
-        
+
         <div className="flex items-center text-xs text-muted-foreground mt-2">
           <CalendarIcon className="h-3 w-3 mr-1" />
           <span>Modifié le {formatDate(project.updatedAt)}</span>

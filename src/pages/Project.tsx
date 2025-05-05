@@ -56,7 +56,7 @@ const ProjectPage = () => {
         const demoProject: ProjectType = {
           id: projectId || "",
           name: "Projet Rénovation Appartement",
-          clientName: "Martin Dupont",
+          conseilleName: "Martin Dupont",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           rooms: [
@@ -161,6 +161,15 @@ const ProjectPage = () => {
       variant: "destructive"
     });
     navigate('/');
+  };
+
+  const handleSaveProject = () => {
+    // Ici, vous ajouteriez la logique pour sauvegarder l'état actuel du projet
+    // Par exemple, faire un appel API pour envoyer les données `project` au backend
+    toast({
+      title: "Projet sauvegardé",
+      description: "Les modifications ont été enregistrées avec succès.",
+    });
   };
 
   // Fonctions pour gérer les images
@@ -432,7 +441,7 @@ const ProjectPage = () => {
                   className="ml-2"
                 >
                   <Save className="h-4 w-4 mr-1" />
-                  Enregistrer
+                  Enregistrer Nom
                 </Button>
               </div>
             ) : (
@@ -445,6 +454,37 @@ const ProjectPage = () => {
             )}
           </div>
 
+          {/* Actions du projet */}
+          <div className="flex items-center gap-2">
+            {/* Bouton Sauvegarder */}
+            <Button variant="default" size="sm" onClick={handleSaveProject}>
+              <Save className="h-4 w-4 mr-2" />
+              Sauvegarder
+            </Button>
+
+            {/* Menu d'options
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setEditingName(true)}>
+                  <Save className="mr-2 h-4 w-4" />
+                  <span>Renommer</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDuplicateProject}>
+                  <Copy className="mr-2 h-4 w-4" />
+                  <span>Dupliquer</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDeleteProject} className="text-destructive">
+                  <Trash className="mr-2 h-4 w-4" />
+                  <span>Supprimer</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu> */}
+          </div>
         </div>
       </header>
 
@@ -457,23 +497,25 @@ const ProjectPage = () => {
               <TabsTrigger value="recap" className="flex-1">Récapitulatif</TabsTrigger>
             </TabsList>
 
-            {/* Sélecteur de pièce */}
-            <div className="mb-4">
-              <Label htmlFor="room-select" className="mb-1 block">Pièce</Label>
-              <Select
-                value={selectedRoom}
-                onValueChange={setSelectedRoom}
-              >
-                <SelectTrigger id="room-select" className="w-full md:w-64">
-                  <SelectValue placeholder="Sélectionnez une pièce" />
-                </SelectTrigger>
-                <SelectContent>
-                  {project?.rooms.map(room => (
-                    <SelectItem key={room.id} value={room.id}>{room.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Sélecteur de pièce - Conditionnellement affiché */}
+            {activeTab !== 'recap' && (
+              <div className="mb-4">
+                <Label htmlFor="room-select" className="mb-1 block">Pièce</Label>
+                <Select
+                  value={selectedRoom}
+                  onValueChange={setSelectedRoom}
+                >
+                  <SelectTrigger id="room-select" className="w-full md:w-64">
+                    <SelectValue placeholder="Sélectionnez une pièce" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {project?.rooms.map(room => (
+                      <SelectItem key={room.id} value={room.id}>{room.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             <TabsContent value="photos" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

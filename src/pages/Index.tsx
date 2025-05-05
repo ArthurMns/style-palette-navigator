@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, Search } from 'lucide-react';
 import Header from '../components/Header';
@@ -24,19 +23,27 @@ const Index = () => {
   const [projects, setProjects] = useState<Project[]>(sampleProjects);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const { toast } = useToast();
-  const projectsPerPage = 8; // Nombre de projets par page
+  const projectsPerPage = 8; // 2 lignes de 4 projets
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculer le nombre total de pages
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
 
   // Calculer l'index de début et de fin
   const startIndex = (currentPage - 1) * projectsPerPage;
   const endIndex = startIndex + projectsPerPage;
   const displayedProjects = projects.slice(startIndex, endIndex);
 
-  const handleCreateProject = (projectName: string, clientName: string) => {
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setCurrentPage(newPage);
+  };
+
+  const handleCreateProject = (projectName: string, conseilleName: string) => {
     const newProject: Project = {
       id: `proj-${Date.now()}`,
       name: projectName,
-      clientName: clientName,
+      conseilleName: conseilleName,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       rooms: []
@@ -129,18 +136,9 @@ const Index = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4">
-                {/* <div className="relative w-64">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Rechercher un projet..."
-                    className="pl-10 pr-4 py-2 h-10 w-full bg-white border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div> */}
-                
-                <Button variant="outline" size="sm" onClick={() => setShowNewProjectModal(true)}>
+                <Button variant="tertiary" size="sm" onClick={() => setShowNewProjectModal(true)}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Nouveau projet
                 </Button>
@@ -148,7 +146,7 @@ const Index = () => {
             </div>
 
             {displayedProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {displayedProjects.map(project => (
                   <ProjectCard
                     key={project.id}
@@ -170,21 +168,37 @@ const Index = () => {
                 </Button>
               </div>
             )}
-            {/* Pagination */}
+
+            {/* Pagination simplifiée sans numéros de page */}
             {projects.length > projectsPerPage && (
               <div className="flex justify-end items-center mt-4">
                 <Pagination>
                   <PaginationContent>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={() => setCurrentPage(currentPage - 1)}
-                      // disabled={currentPage === 1}
-                    />
-                    <PaginationNext
-                      href="#"
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                      // disabled={endIndex >= projects.length}
-                    />
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage > 1) {
+                            setCurrentPage(currentPage - 1);
+                          }
+                        }}
+                        disabled={currentPage === 1}
+                      />
+                    </PaginationItem>
+
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage < totalPages) {
+                            setCurrentPage(currentPage + 1);
+                          }
+                        }}
+                        disabled={currentPage >= totalPages}
+                      />
+                    </PaginationItem>
                   </PaginationContent>
                 </Pagination>
               </div>

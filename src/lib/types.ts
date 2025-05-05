@@ -3,7 +3,7 @@
 export interface Project {
   id: string;
   name: string;
-  clientName: string;
+  conseilleName: string;
   createdAt: string;
   updatedAt: string;
   coverImage?: string;
@@ -36,6 +36,7 @@ export interface ColorApplication {
 export interface Color {
   id: string;
   name: string;
+  desc: string;
   hexCode: string;
   reference: string;
   category: string;

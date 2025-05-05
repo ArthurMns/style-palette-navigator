@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 interface NewProjectModalProps {
   open: boolean;
   onClose: () => void;
-  onCreateProject: (projectName: string, clientName: string) => void;
+  onCreateProject: (projectName: string, conseilleName: string) => void;
 }
 
 const NewProjectModal: React.FC<NewProjectModalProps> = ({
@@ -24,44 +24,44 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
   onCreateProject
 }) => {
   const [projectName, setProjectName] = useState('');
-  const [clientName, setClientName] = useState('');
+  const [conseilleName, setconseilleName] = useState('');
   const [projectNameError, setProjectNameError] = useState('');
-  const [clientNameError, setClientNameError] = useState('');
+  const [conseilleNameError, setconseilleNameError] = useState('');
 
   const validateForm = () => {
     let isValid = true;
-    
+
     if (!projectName.trim()) {
       setProjectNameError('Le nom du projet est requis');
       isValid = false;
     } else {
       setProjectNameError('');
     }
-    
-    if (!clientName.trim()) {
-      setClientNameError('Le nom du client est requis');
+
+    if (!conseilleName.trim()) {
+      setconseilleNameError('Le nom du client est requis');
       isValid = false;
     } else {
-      setClientNameError('');
+      setconseilleNameError('');
     }
-    
+
     return isValid;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
-      onCreateProject(projectName, clientName);
+      onCreateProject(projectName, conseilleName);
       resetForm();
     }
   };
 
   const resetForm = () => {
     setProjectName('');
-    setClientName('');
+    setconseilleName('');
     setProjectNameError('');
-    setClientNameError('');
+    setconseilleNameError('');
   };
 
   return (
@@ -74,7 +74,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
               Créez un nouveau projet de conseil en couleurs.
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="project-name" className="text-right">
@@ -93,7 +93,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                 )}
               </div>
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="client-name" className="text-right">
                 Nom du client
@@ -101,18 +101,18 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
               <div className="col-span-3">
                 <Input
                   id="client-name"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
+                  value={conseilleName}
+                  onChange={(e) => setconseilleName(e.target.value)}
                   placeholder="Jean Dupont"
-                  className={clientNameError ? "border-destructive" : ""}
+                  className={conseilleNameError ? "border-destructive" : ""}
                 />
-                {clientNameError && (
-                  <p className="text-destructive text-sm mt-1">{clientNameError}</p>
+                {conseilleNameError && (
+                  <p className="text-destructive text-sm mt-1">{conseilleNameError}</p>
                 )}
               </div>
             </div>
           </div>
-          
+
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
               Annuler
