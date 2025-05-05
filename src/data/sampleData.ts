@@ -1,4 +1,3 @@
-
 import { Project, Color } from "../lib/types";
 
 export const sampleProjects: Project[] = [
@@ -71,6 +70,80 @@ export const sampleProjects: Project[] = [
     clientName: "Marie Petit",
     createdAt: "2025-04-10T14:00:00Z",
     updatedAt: "2025-04-25T09:10:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-005",
+    name: "Loft Dupont",
+    clientName: "Thomas Dupont",
+    createdAt: "2025-04-05T13:20:00Z",
+    updatedAt: "2025-04-24T11:15:00Z",
+    coverImage: "https://images.unsplash.com/photo-1617806118233-18e1de247200",
+    rooms: [
+      {
+        id: "room-005",
+        name: "Cuisine ouverte",
+        images: [
+          {
+            id: "img-005",
+            src: "https://images.unsplash.com/photo-1617806118233-18e1de247200",
+            colorApplied: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "proj-006",
+    name: "Maison de campagne Moreau",
+    clientName: "Claire Moreau",
+    createdAt: "2025-03-28T09:45:00Z",
+    updatedAt: "2025-04-22T15:30:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-007",
+    name: "Résidence Leroy",
+    clientName: "Michel Leroy",
+    createdAt: "2025-03-15T10:10:00Z",
+    updatedAt: "2025-04-21T14:40:00Z",
+    coverImage: "https://images.unsplash.com/photo-1615529182904-14819c35db37",
+    rooms: [
+      {
+        id: "room-007",
+        name: "Chambre principale",
+        images: [
+          {
+            id: "img-007",
+            src: "https://images.unsplash.com/photo-1615529182904-14819c35db37",
+            colorApplied: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "proj-008",
+    name: "Rénovation Boutique Bernard",
+    clientName: "François Bernard",
+    createdAt: "2025-03-05T11:25:00Z",
+    updatedAt: "2025-04-19T16:50:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-009",
+    name: "Rénovation Boutique Bernard",
+    clientName: "François Bernard",
+    createdAt: "2025-03-05T11:25:00Z",
+    updatedAt: "2025-04-19T16:50:00Z",
+    rooms: []
+  },
+  {
+    id: "proj-010",
+    name: "Rénovation Boutique Bernard",
+    clientName: "François Bernard",
+    createdAt: "2025-03-05T11:25:00Z",
+    updatedAt: "2025-04-19T16:50:00Z",
     rooms: []
   }
   ,
