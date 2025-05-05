@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { PlusCircle, Search, BellRing, Settings, LogOut } from 'lucide-react'; // Ajout des icônes Settings et LogOut
+import { Link } from 'react-router-dom';
+import { PlusCircle, Search, BellRing, Settings, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,28 +9,20 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Ajout des imports DropdownMenu
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   onNewProject: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNewProject }) => {
-  const handleAdminClick = () => {
-    // Logique pour accéder à l'administration
-    console.log("Accès à l'administration");
-  };
-
-  const handleLogoutClick = () => {
-    // Logique pour la déconnexion
-    console.log("Déconnexion");
-  };
-
   return (
     <header className="w-full px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src="/Logo.png" alt="SoStyle Logo" width="150" height="100" />
+          <Link to="/">
+            <img src="/Logo.png" alt="SoStyle Logo" width="150" height="100" />
+          </Link>
         </div>
 
         {/* Barre de recherche commentée */}
@@ -48,18 +42,17 @@ const Header: React.FC<HeaderProps> = ({ onNewProject }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button>
-                {/* <PlusCircle className="h-4 w-4 mr-2" /> */}
                 <span>Bienvenue Conseillé Admin</span>
-                {/* Optionnel: ajouter une icône de chevron vers le bas */}
-                {/* <ChevronDown className="h-4 w-4 ml-2" /> */}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleAdminClick}>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Administration</span>
+              <DropdownMenuItem asChild>
+                <Link to="/administration" className="flex items-center w-full">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Administration</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleLogoutClick}>
+              <DropdownMenuItem>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Déconnexion</span>
               </DropdownMenuItem>
