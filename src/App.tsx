@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 import { Toaster } from "@/components/ui/toaster";
@@ -8,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ProjectPage from "./pages/Project";
 import NotFound from "./pages/NotFound";
+import Footer from "@/components/Footer"; // Correction du chemin d'importation
 
 const queryClient = new QueryClient();
 
@@ -37,7 +39,7 @@ function App() {
           </TooltipProvider>
         </QueryClientProvider>
       </main>
-      {/* <Footer /> */}
+      <Footer />
       
       {/* Vos modals ou autres composants */}
     </div>
