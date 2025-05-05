@@ -41,3 +41,19 @@ export interface Color {
   category: string;
   brand: string;
 }
+
+export interface DecoTip {
+  id: string;
+  type: 'text' | 'image';
+  content: string;
+  caption?: string;
+  roomId: string;
+}
+
+export interface ExportOptions {
+  includeClientInfo: boolean;
+  includeImages: boolean;
+  includeColorDetails: boolean;
+  includeQuantities: boolean;
+  fileFormat: 'pdf' | 'csv';
+}

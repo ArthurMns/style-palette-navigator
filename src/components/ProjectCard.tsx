@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CalendarIcon, MoreHorizontal, User, Image } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -27,14 +28,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onDuplicate,
   onRename
 }) => {
+  const navigate = useNavigate();
+  
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "d MMMM yyyy", { locale: fr });
+  };
+
+  const handleCardClick = () => {
+    onSelect(project.id);
+    navigate(`/project/${project.id}`);
   };
 
   return (
     <div 
       className="project-card bg-white relative cursor-pointer"
-      onClick={() => onSelect(project.id)}
+      onClick={handleCardClick}
     >
       <div className="h-36 bg-gray-100 relative">
         {project.coverImage ? (
