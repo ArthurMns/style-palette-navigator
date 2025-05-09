@@ -102,7 +102,7 @@ export const sampleProjects: Project[] = [
     conseilleName: "Conseillé 3",
     createdAt: "2025-05-30T13:30:00Z",
     updatedAt: "2025-06-01T10:45:00Z",
-    coverImage: "https://images.unsplash.com/photo-1746061546234-8c38375eef06",
+    coverImage: "https://images.unsplash.com/photo-1746061546854-1fb8b0b90862",
     rooms: []
   },
   {
